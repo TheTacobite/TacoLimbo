@@ -31,8 +31,7 @@
   "height": 256,
   "infiniburn": [
     "minecraft:netherrack",
-    "minecraft:magma_block",
-    "minecraft:bedrock"
+    "minecraft:magma_block"
   ],
   "logical_height": 128,
   "min_y": 0,

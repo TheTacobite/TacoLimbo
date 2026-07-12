@@ -40,13 +40,13 @@
   "has_ceiling": false,
   "has_ender_dragon_fight": false,
   "has_skylight": true,
-  "height": 384,
+  "height": 256,
   "infiniburn": [
     "minecraft:netherrack",
     "minecraft:magma_block"
   ],
-  "logical_height": 384,
-  "min_y": -64,
+  "logical_height": 256,
+  "min_y": 0,
   "monster_spawn_block_light_limit": 0,
   "monster_spawn_light_level": {
     "type": "minecraft:uniform",
