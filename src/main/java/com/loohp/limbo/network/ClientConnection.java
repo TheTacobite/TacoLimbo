@@ -518,7 +518,7 @@ public class ClientConnection implements Runnable {
                                 break;
                             }
 
-                            PacketLoginOutLoginSuccess success = new PacketLoginOutLoginSuccess(uuid, username, Limbo.getInstance().SERVER_SESSION_ID);
+                            PacketLoginOutLoginSuccess success = new PacketLoginOutLoginSuccess(uuid, username);
                             sendPacket(success);
 
                             player = new Player(this, username, uuid, Limbo.getInstance().getNextEntityId(), Limbo.getInstance().getServerProperties().getWorldSpawn(), new PlayerInteractManager());
@@ -542,7 +542,7 @@ public class ClientConnection implements Runnable {
                             inetAddress = InetAddress.getByName(data.getIpAddress());
                             forwardedSkin = data.getSkinResponse();
 
-                            PacketLoginOutLoginSuccess success = new PacketLoginOutLoginSuccess(data.getUuid(), data.getUsername(), Limbo.getInstance().SERVER_SESSION_ID);
+                            PacketLoginOutLoginSuccess success = new PacketLoginOutLoginSuccess(data.getUuid(), data.getUsername());
                             sendPacket(success);
 
                             player = new Player(this, data.getUsername(), data.getUuid(), Limbo.getInstance().getNextEntityId(), Limbo.getInstance().getServerProperties().getWorldSpawn(), new PlayerInteractManager());
