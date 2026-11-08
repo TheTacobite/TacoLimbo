@@ -1,0 +1,95 @@
+[
+  {
+    "block_state_provider": {
+      "type": "minecraft:rule_based",
+      "rules": [
+        {
+          "if_true": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                  "minecraft:grass_block",
+                  "minecraft:dirt_path",
+                  "minecraft:dirt"
+                ]
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  1,
+                  0
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:void_air",
+                  "minecraft:cave_air"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "id": "minecraft:farmland",
+            "properties": {
+              "moisture": "0"
+            }
+          }
+        },
+        {
+          "if_true": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:coarse_dirt"
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  1,
+                  0
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:void_air",
+                  "minecraft:cave_air"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "id": "minecraft:dirt"
+          }
+        }
+      ]
+    },
+    "disallowed_faces": [
+      "down"
+    ],
+    "item_damage_per_use": 1,
+    "sound": "minecraft:item.hoe.till"
+  },
+  {
+    "block_state_provider": {
+      "type": "minecraft:rule_based",
+      "rules": [
+        {
+          "if_true": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:rooted_dirt"
+          },
+          "then": {
+            "id": "minecraft:dirt"
+          }
+        }
+      ]
+    },
+    "drop_strategy": "clicked_face",
+    "item_damage_per_use": 1,
+    "loot": "minecraft:till/rooted_dirt",
+    "sound": "minecraft:item.hoe.till"
+  }
+]

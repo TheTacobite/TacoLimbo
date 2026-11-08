@@ -19,12 +19,34 @@
 
 package com.loohp.limbo.utils;
 
+import net.querz.nbt.tag.ByteTag;
 import net.querz.nbt.tag.CompoundTag;
+import net.querz.nbt.tag.DoubleTag;
 import net.querz.nbt.tag.ListTag;
+import net.querz.nbt.tag.LongTag;
+import net.querz.nbt.tag.StringTag;
+import net.querz.nbt.tag.Tag;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class CustomNBTUtils {
+
+	public static Tag<?> getTagFromJson(Object json) {
+		if (json instanceof JSONObject) {
+			return getCompoundTagFromJson((JSONObject) json);
+		} else if (json instanceof JSONArray) {
+			return getListTagFromJson((JSONArray) json);
+		} else if (json instanceof Boolean) {
+			return new ByteTag((byte) ((boolean) json ? 1 : 0));
+		} else if (json instanceof Long) {
+			return new LongTag((long) json);
+		} else if (json instanceof Double) {
+			return new DoubleTag((double) json);
+		} else if (json instanceof String) {
+			return new StringTag((String) json);
+		}
+		throw new IllegalArgumentException("Unsupported JSON value: " + json);
+	}
 	
 	public static CompoundTag getCompoundTagFromJson(JSONObject json) {
 		CompoundTag tag = new CompoundTag();
@@ -33,19 +55,7 @@ public class CustomNBTUtils {
 			String key = (String) obj;
 			Object rawValue = json.get(key);
 
-			if (rawValue instanceof JSONObject) {
-				tag.put(key, getCompoundTagFromJson((JSONObject) rawValue));
-			} else if (rawValue instanceof JSONArray) {
-				tag.put(key, getListTagFromJson((JSONArray) rawValue));
-			} else if (rawValue instanceof Boolean) {
-				tag.putBoolean(key, (boolean) rawValue);
-			} else if (rawValue instanceof Long) {
-				tag.putLong(key, (long) rawValue);
-			} else if (rawValue instanceof Double) {
-				tag.putDouble(key, (double) rawValue);
-			} else if (rawValue instanceof String) {
-				tag.putString(key, (String) rawValue);
-			}
+			tag.put(key, getTagFromJson(rawValue));
 		}
 		
 		return tag;
@@ -57,19 +67,7 @@ public class CustomNBTUtils {
 		}
 		ListTag<?> listTag = ListTag.createUnchecked(null);
 		for (Object rawValue : json) {
-			if (rawValue instanceof JSONObject) {
-				listTag.addUnchecked(getCompoundTagFromJson((JSONObject) rawValue));
-			} else if (rawValue instanceof JSONArray) {
-				listTag.addUnchecked(getListTagFromJson((JSONArray) rawValue));
-			} else if (rawValue instanceof Boolean) {
-				listTag.addBoolean((boolean) rawValue);
-			} else if (rawValue instanceof Long) {
-				listTag.addLong((long) rawValue);
-			} else if (rawValue instanceof Double) {
-				listTag.addDouble((double) rawValue);
-			} else if (rawValue instanceof String) {
-				listTag.addString((String) rawValue);
-			}
+			listTag.addUnchecked(getTagFromJson(rawValue));
 		}
 		return listTag;
 	}

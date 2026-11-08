@@ -91,7 +91,7 @@ public class PacketPlayOutRespawn extends PacketOut {
 		DataTypeIO.writeString(output, Key.key(world.getName()).toString(), StandardCharsets.UTF_8);
 		output.writeLong(hashedSeed);
         output.writeByte((byte) gamemode.getId());
-		output.writeByte((byte) gamemode.getId());
+		DataTypeIO.writeVarInt(output, gamemode.getId() + 1);
 		output.writeBoolean(isDebug);
 		output.writeBoolean(isFlat);
 		output.writeBoolean(copyMetaData);

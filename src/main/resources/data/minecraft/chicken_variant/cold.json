@@ -32,7 +32,8 @@
           "minecraft:windswept_forest",
           "minecraft:windswept_gravelly_hills",
           "minecraft:windswept_hills",
-          "minecraft:stony_peaks"
+          "minecraft:stony_peaks",
+          "minecraft:dappled_forest"
         ]
       },
       "priority": 1

@@ -25,7 +25,6 @@ import com.loohp.limbo.utils.CustomNBTUtils;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.key.Key;
-import net.querz.nbt.tag.CompoundTag;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -46,6 +45,8 @@ public class RegistryCustom {
     private static final Map<Key, RegistryCustom> REGISTRIES = new HashMap<>();
 
     public static final RegistryCustom BANNER_PATTERN = register("banner_pattern");
+    public static final RegistryCustom BLOCK_STATE_PROVIDER = register("worldgen/block_state_provider");
+    public static final RegistryCustom BLOCK_TRANSFORMER = register("block_transformer");
     public static final RegistryCustom CAT_SOUND_VARIANT = register("cat_sound_variant");
     public static final RegistryCustom CAT_VARIANT = register("cat_variant");
     public static final RegistryCustom CHAT_TYPE = register("chat_type");
@@ -54,6 +55,7 @@ public class RegistryCustom {
     public static final RegistryCustom COW_SOUND_VARIANT = register("cow_sound_variant");
     public static final RegistryCustom COW_VARIANT = register("cow_variant");
     public static final RegistryCustom DAMAGE_TYPE = register("damage_type");
+    public static final RegistryCustom DECORATED_POT_PATTERN = register("decorated_pot_pattern");
     public static final RegistryCustom DIMENSION_TYPE = register("dimension_type");
     public static final RegistryCustom FROG_VARIANT = register("frog_variant");
     public static final RegistryCustom INSTRUMENT = register("instrument");
@@ -83,10 +85,10 @@ public class RegistryCustom {
     }
 
     private final Key identifier;
-    private final Map<Key, CompoundTag> entries;
+    private final Map<Key, net.querz.nbt.tag.Tag<?>> entries;
     private final Map<Key, List<Tag>> tags;
 
-    private RegistryCustom(Key identifier, Map<Key, CompoundTag> entries, Map<Key, List<Tag>> tags) {
+    private RegistryCustom(Key identifier, Map<Key, net.querz.nbt.tag.Tag<?>> entries, Map<Key, List<Tag>> tags) {
         this.identifier = identifier;
         this.entries = entries;
         this.tags = tags;
@@ -104,16 +106,16 @@ public class RegistryCustom {
     }
 
     @SuppressWarnings("PatternValidation")
-    private Map<Key, CompoundTag> loadEntries() {
-        Map<Key, CompoundTag> entries = new LinkedHashMap<>();
+    private Map<Key, net.querz.nbt.tag.Tag<?>> loadEntries() {
+        Map<Key, net.querz.nbt.tag.Tag<?>> entries = new LinkedHashMap<>();
         String pathStart = "data/" + identifier.namespace() + "/" + identifier.value() + "/";
         Pattern pattern = Pattern.compile(Pattern.quote(pathStart) + ".*");
         for (String path : ClasspathResourcesUtils.getResources(pattern)) {
             if (path.endsWith(".json")) {
                 try (InputStream inputStream = Limbo.class.getClassLoader().getResourceAsStream(path)) {
                     Key entryKey = Key.key(identifier.namespace(), path.substring(path.indexOf(identifier.value()) + identifier.value().length() + 1, path.lastIndexOf(".")));
-                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                    CompoundTag value = CustomNBTUtils.getCompoundTagFromJson(jsonObject);
+                    Object jsonValue = new JSONParser().parse(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                    net.querz.nbt.tag.Tag<?> value = CustomNBTUtils.getTagFromJson(jsonValue);
                     entries.put(entryKey, value);
                 } catch (IOException | ParseException e) {
                     throw new RuntimeException(e);
@@ -159,7 +161,7 @@ public class RegistryCustom {
         return identifier;
     }
 
-    public Map<Key, CompoundTag> getEntries() {
+    public Map<Key, net.querz.nbt.tag.Tag<?>> getEntries() {
         return entries;
     }
 

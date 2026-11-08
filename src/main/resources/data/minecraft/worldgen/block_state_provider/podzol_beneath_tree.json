@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:rule_based",
+  "rules": [
+    {
+      "if_true": {
+        "type": "minecraft:matching_blocks",
+        "blocks": [
+          "minecraft:dirt",
+          "minecraft:coarse_dirt",
+          "minecraft:rooted_dirt",
+          "minecraft:mud",
+          "minecraft:muddy_mangrove_roots",
+          "minecraft:moss_block",
+          "minecraft:pale_moss_block",
+          "minecraft:grass_block",
+          "minecraft:podzol",
+          "minecraft:mycelium"
+        ]
+      },
+      "then": {
+        "id": "minecraft:podzol",
+        "properties": {
+          "snowy": "false"
+        }
+      }
+    }
+  ]
+}

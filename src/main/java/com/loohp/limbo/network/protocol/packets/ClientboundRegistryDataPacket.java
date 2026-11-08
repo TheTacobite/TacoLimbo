@@ -23,7 +23,7 @@ import com.loohp.limbo.registry.PacketRegistry;
 import com.loohp.limbo.registry.RegistryCustom;
 import com.loohp.limbo.utils.DataTypeIO;
 import net.kyori.adventure.key.Key;
-import net.querz.nbt.tag.CompoundTag;
+import net.querz.nbt.tag.Tag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -52,9 +52,9 @@ public class ClientboundRegistryDataPacket extends PacketOut {
 
         DataTypeIO.writeString(output, registry.getIdentifier().asString(), StandardCharsets.UTF_8);
         DataTypeIO.writeVarInt(output, registry.getEntries().size());
-        for (Map.Entry<Key, CompoundTag> entry : registry.getEntries().entrySet()) {
+        for (Map.Entry<Key, Tag<?>> entry : registry.getEntries().entrySet()) {
             DataTypeIO.writeString(output, entry.getKey().asString(), StandardCharsets.UTF_8);
-            CompoundTag data = entry.getValue();
+            Tag<?> data = entry.getValue();
             if (data == null) {
                 output.writeBoolean(false);
             } else {

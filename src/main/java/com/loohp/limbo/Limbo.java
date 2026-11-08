@@ -132,8 +132,8 @@ public final class Limbo {
 	
 	//===========================
 	
-	public final String SERVER_IMPLEMENTATION_VERSION = "26.2";
-	public final int SERVER_IMPLEMENTATION_PROTOCOL = 776;
+	public final String SERVER_IMPLEMENTATION_VERSION = "26.3";
+	public final int SERVER_IMPLEMENTATION_PROTOCOL = 777;
 	public final UUID SERVER_SESSION_ID = UUID.randomUUID();
 	public final String LIMBO_IMPLEMENTATION_VERSION;
 	

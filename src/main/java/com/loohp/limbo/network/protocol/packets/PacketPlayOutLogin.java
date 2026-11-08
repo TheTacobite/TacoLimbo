@@ -175,7 +175,7 @@ public class PacketPlayOutLogin extends PacketOut {
 		DataTypeIO.writeString(output, Key.key(world.getName()).toString(), StandardCharsets.UTF_8);
 		output.writeLong(hashedSeed);
         output.writeByte((byte) gamemode.getId());
-		output.writeByte(-1);
+		DataTypeIO.writeVarInt(output, 0);
 		output.writeBoolean(isDebug);
 		output.writeBoolean(isFlat);
 		output.writeBoolean(false);

@@ -266,22 +266,10 @@ public class ClientboundLevelChunkWithLightPacket extends PacketOut {
 			DataTypeIO.writeTag(output, each);
 		}
 
-		DataTypeIO.writeVarInt(output, skyLightBitMasks.length);
-		for (long l : skyLightBitMasks) {
-			output.writeLong(l);
-		}
-		DataTypeIO.writeVarInt(output, blockLightBitMasks.length);
-		for (long l : blockLightBitMasks) {
-			output.writeLong(l);
-		}
-		DataTypeIO.writeVarInt(output, skyLightBitMasksEmpty.length);
-		for (long l : skyLightBitMasksEmpty) {
-			output.writeLong(l);
-		}
-		DataTypeIO.writeVarInt(output, blockLightBitMasksEmpty.length);
-		for (long l : blockLightBitMasksEmpty) {
-			output.writeLong(l);
-		}
+		DataTypeIO.writeBitSet(output, BitSet.valueOf(skyLightBitMasks));
+		DataTypeIO.writeBitSet(output, BitSet.valueOf(blockLightBitMasks));
+		DataTypeIO.writeBitSet(output, BitSet.valueOf(skyLightBitMasksEmpty));
+		DataTypeIO.writeBitSet(output, BitSet.valueOf(blockLightBitMasksEmpty));
 
 		DataTypeIO.writeVarInt(output, skylightArrays.stream().mapToInt(each -> each == null ? 0 : 1).sum());
 		for (int i = skylightArrays.size() - 1; i >= 0; i--) {
