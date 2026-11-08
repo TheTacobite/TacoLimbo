@@ -184,6 +184,12 @@ public class DataTypeIO {
 		}
 	}
 
+	public static void writeBitSet(DataOutputStream out, BitSet bitset) throws IOException {
+		byte[] bytes = bitset.toByteArray();
+		writeVarInt(out, bytes.length);
+		out.write(bytes);
+	}
+
 	public static BitSet readFixedBitSet(DataInputStream in, int i) throws IOException {
 		byte[] abyte = new byte[-Math.floorDiv(-i, 8)];
 		in.readFully(abyte);

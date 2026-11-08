@@ -16,7 +16,7 @@ or GitHub release binaries at build time.
 
 - **`master`** - tracks upstream LOOHP's latest game-version bumps. Not built from directly.
 - **`production`** - pinned to whatever exact Minecraft version this network's real Paper servers
-  actually run (currently `26.1.2`, commit `27aae24`). **Always build `NetCoreLimbo`'s vendored
+  actually run (currently `26.3`, from upstream commit `cadac37`). **Always build `NetCoreLimbo`'s vendored
   jar from this branch, never `master`.**
 
 Confirmed live: a real Minecraft client silently rejects Limbo's dynamic registry data

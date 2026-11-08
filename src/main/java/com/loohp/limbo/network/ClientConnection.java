@@ -595,7 +595,7 @@ public class ClientConnection implements Runnable {
                 worldSpawn = spawnEvent.getSpawnLocation();
                 World world = worldSpawn.getWorld();
 
-                PacketPlayOutLogin join = new PacketPlayOutLogin(player.getEntityId(), false, Limbo.getInstance().getWorlds(), properties.getMaxPlayers(), 8, 8, properties.isReducedDebugInfo(), true, false, world.getEnvironment(), world, 0, properties.getDefaultGamemode(), false, true, 0, 0, false);
+                PacketPlayOutLogin join = new PacketPlayOutLogin(player.getEntityId(), false, Limbo.getInstance().getWorlds(), properties.getMaxPlayers(), 8, 8, properties.isReducedDebugInfo(), true, false, world.getEnvironment(), world, 0, properties.getDefaultGamemode(), false, true, 0, 0, false, false);
                 sendPacket(join);
                 Limbo.getInstance().getUnsafe().a(player, properties.getDefaultGamemode());
 

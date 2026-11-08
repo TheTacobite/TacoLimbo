@@ -4,7 +4,7 @@
     "minecraft:gameplay/bed_rule": {
       "can_set_spawn": "never",
       "can_sleep": "never",
-      "explodes": true
+      "destroy_on_use": true
     },
     "minecraft:gameplay/can_start_raid": false,
     "minecraft:gameplay/fast_lava": true,
@@ -12,6 +12,11 @@
     "minecraft:gameplay/respawn_anchor_works": true,
     "minecraft:gameplay/sky_light_level": 4.0,
     "minecraft:gameplay/snow_golem_melts": true,
+    "minecraft:gameplay/straw_bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "destroy_on_use": true
+    },
     "minecraft:gameplay/water_evaporates": true,
     "minecraft:visual/ambient_light_color": "#302821",
     "minecraft:visual/default_dripstone_particle": {
@@ -29,7 +34,10 @@
   "has_fixed_time": true,
   "has_skylight": false,
   "height": 256,
-  "infiniburn": "#minecraft:infiniburn_nether",
+  "infiniburn": [
+    "minecraft:netherrack",
+    "minecraft:magma_block"
+  ],
   "logical_height": 128,
   "min_y": 0,
   "monster_spawn_block_light_limit": 15,

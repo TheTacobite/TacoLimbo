@@ -32,12 +32,12 @@ public class PacketLoginOutLoginSuccess extends PacketOut {
 	
 	private final UUID uuid;
 	private final String username;
-	
+
 	public PacketLoginOutLoginSuccess(UUID uuid, String username) {
 		this.uuid = uuid;
 		this.username = username;
 	}
-	
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -49,13 +49,13 @@ public class PacketLoginOutLoginSuccess extends PacketOut {
 	@Override
 	public byte[] serializePacket() throws IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		
+
 		DataOutputStream output = new DataOutputStream(buffer);
 		output.writeByte(PacketRegistry.getPacketId(getClass()));
 		DataTypeIO.writeUUID(output, uuid);
 		DataTypeIO.writeString(output, username, StandardCharsets.UTF_8);
 		DataTypeIO.writeVarInt(output, 0);
-		
+
 		return buffer.toByteArray();
 	}
 
