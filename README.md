@@ -15,12 +15,18 @@ the one library not published there (`com.github.Querz:NBT:6.1`, previously pull
 is committed under `libs/` as a file-based Maven repository, so `mvn -o clean package` builds
 fully offline once Central's artifacts are cached.
 
+**We maintain this fork ourselves, including Minecraft version updates** (decided 2026-11-15).
+Upstream's last change we took is `cadac37` (Minecraft 26.3, 2026-09-15); from here on nothing is
+merged from LOOHP/Limbo. New Minecraft versions are ported by hand - see "Updating to a new
+Minecraft version" below. Keep `LICENSE` (Apache 2.0) and LOOHP's copyright headers in place; that
+is the licence's only condition.
+
 ## Branches
 
-- **`master`** - tracks upstream LOOHP's latest game-version bumps. Not built from directly.
+- **`master`** - where the next Minecraft version is ported. Not built from for deployment.
 - **`production`** - pinned to whatever exact Minecraft version this network's real Paper servers
-  actually run (currently `26.3`, from upstream commit `cadac37`). **Always build `NetCoreLimbo`'s vendored
-  jar from this branch, never `master`.**
+  actually run (currently `26.3`). **Always build `NetCoreLimbo`'s vendored jar and the GitHub
+  releases from this branch, never `master`.**
 
 Confirmed live: a real Minecraft client silently rejects Limbo's dynamic registry data
 (`dimension_type`, biomes, etc.) if it's built for a *different* game version than the client
@@ -28,8 +34,44 @@ itself - even one point release off. The failure looks exactly like corrupted JS
 ("Failed to parse value...") even though the data is perfectly valid for its own target version.
 `master` had already moved on to "Minecraft 26.2" while this network runs `26.1.2`, which cost a
 long, misleading debugging cycle before the real cause (a version mismatch, not bad data) was
-found. Re-point `production` at a newer commit only when this network's own Paper version
-actually moves to that Minecraft version too - never just to pick up upstream fixes.
+found. Move `production` to a newer Minecraft version only when this network's own Paper version
+actually moves to that Minecraft version too.
+
+## Updating to a new Minecraft version
+
+Every past version bump (26.1, 26.1.1, 26.1.2, 26.2, 26.3 - e.g. upstream commit `d651aee` for
+26.3) touched the same places. Do the work on `master`, then fast-forward `production` once the
+network's Paper servers move to that version.
+
+1. **Version constants** - `Limbo.java`: `SERVER_IMPLEMENTATION_VERSION` (e.g. `"26.3"`) and
+   `SERVER_IMPLEMENTATION_PROTOCOL` (the new protocol number, from the Minecraft Wiki's protocol
+   version table). `pom.xml`: bump `<version>` and the Minecraft suffix in `<finalName>`.
+2. **Regenerate the bundled game data from Mojang's own server jar** - download the official
+   `server.jar` for the new version, then run its built-in data generator:
+   ```bash
+   java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --reports --server
+   ```
+   Copy `generated/reports/{blocks,packets,registries}.json` over `src/main/resources/reports/`.
+   The registry JSONs under `src/main/resources/data/minecraft/` (dimension_type, worldgen/biome,
+   chat_type, damage_type, the `*_variant` folders, tags, and so on) are the vanilla data pack:
+   take them from the generator's `generated/data/minecraft/` if it produced them, otherwise
+   from `data/minecraft/` inside the real server jar that `server.jar` bundles
+   (`META-INF/versions/<version>/server-<version>.jar` - it's a zip). Not yet done by us end to
+   end: on the first port, diff the result against upstream's `d651aee` layout to confirm the
+   source, then fix this step. Add any brand-new registry folder the client now expects, and
+   delete ones Mojang removed. This is most of the diff by line count, but it's all generated.
+3. **Packet format changes** - read the release's protocol changes (the Minecraft Wiki's
+   "Java Edition protocol" page history, or the `packets.json` diff from step 2) and update the
+   matching classes under `network/protocol/packets/`. Usually only a handful change: for 26.3
+   that was the chunk packet, registry data, login, and respawn packets, plus small helpers in
+   `DataTypeIO` / `CustomNBTUtils` / `RegistryCustom`.
+4. **Build and test with a real client** - `mvn clean package`, run the jar behind a local
+   Velocity, and join with the new Minecraft version. A version mismatch or bad registry data
+   fails at login with "Failed to parse value", so a successful join plus moving around is the
+   real check.
+5. **Release** - fast-forward `production`, tag `v<pom version>-<mc version>`, attach the jar,
+   copy it into `NetCoreLimbo/libs/` (updating that pom's Limbo version), and deploy with
+   NetCoreVelocity's `62-fetch-shared-plugins.sh limbo` then `31-update-plugins.sh all limbo`.
 
 ## Building
 
