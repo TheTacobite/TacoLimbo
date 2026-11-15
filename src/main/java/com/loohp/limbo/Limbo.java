@@ -33,7 +33,6 @@ import com.loohp.limbo.inventory.Inventory;
 import com.loohp.limbo.inventory.InventoryHolder;
 import com.loohp.limbo.inventory.InventoryType;
 import com.loohp.limbo.location.Location;
-import com.loohp.limbo.metrics.Metrics;
 import com.loohp.limbo.network.ServerConnection;
 import com.loohp.limbo.network.protocol.packets.PacketPlayOutBoss;
 import com.loohp.limbo.permissions.PermissionsManager;
@@ -157,8 +156,6 @@ public final class Limbo {
 	private final Tick tick;
 	private final LimboScheduler scheduler;
 	
-	private final Metrics metrics;
-	
 	public final AtomicInteger entityIdCount = new AtomicInteger();
 	
 	@SuppressWarnings("deprecation")
@@ -252,8 +249,6 @@ public final class Limbo {
 		}
 		
 		server = new ServerConnection(properties.getServerIp(), properties.getServerPort(), false);
-		
-		metrics = new Metrics();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			Limbo.getInstance().terminate();
@@ -376,10 +371,6 @@ public final class Limbo {
 		return console;
 	}
 	
-	public Metrics getMetrics() {
-		return metrics;
-	}
-
 	public Set<Player> getPlayers() {
 		return new HashSet<>(playersByUUID.values());
 	}

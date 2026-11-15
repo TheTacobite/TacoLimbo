@@ -211,9 +211,14 @@
 			<name>Maven Central</name>
 			<url>https://repo.maven.apache.org/maven2/</url>
 		</repository>
+		<!-- Libraries not on Maven Central, committed into this repo (Maven repository layout)
+		     instead of fetched from a third-party host like JitPack. Currently only
+		     com.github.Querz:NBT:6.1. To add one: mvn install:install-file -Dfile=<jar>
+		     -DpomFile=<pom> -DlocalRepositoryPath=libs, then delete the _remote.repositories /
+		     maven-metadata-local.xml files it leaves behind. -->
 		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
+			<id>tacolimbo-libs</id>
+			<url>file://${project.basedir}/libs</url>
 		</repository>
 	</repositories>
 
