@@ -10,7 +10,10 @@ companion plugin [`NetCoreLimbo`](https://github.com/TheTacobite/NetCoreLimbo).
 Supply-chain independence - "let's not rely on anyone." Building our own jar from this fork's
 source means the network's AFK-holding server keeps working even if upstream LOOHP ever deletes
 or changes their repo, and means we never depend on `repo.loohpjames.com` (their own Maven host)
-or GitHub release binaries at build time.
+or GitHub release binaries at build time. The only remote the build touches is Maven Central:
+the one library not published there (`com.github.Querz:NBT:6.1`, previously pulled from JitPack)
+is committed under `libs/` as a file-based Maven repository, so `mvn -o clean package` builds
+fully offline once Central's artifacts are cached.
 
 ## Branches
 
@@ -43,8 +46,12 @@ cost a full debugging cycle before this was caught).
 
 ## Fixes applied on top of upstream
 
-- **`PacketLoginOutLoginSuccess` wire-format bug** (fixed on `master`'s lineage, commit `3fd1af4`
-  - not needed on `production`, which was already correct at the `27aae24` commit it's pinned to):
+- **bStats removed.** Upstream ships bStats usage reporting turned on by default (it creates
+  `plugins/bStats/config.yml` with `enabled: true` and posts server stats to bStats.org). The
+  `metrics` package and its two call sites are deleted, so the server makes no outbound calls of
+  its own beyond Mojang's skin lookup for players who connect without proxy forwarding.
+- **`PacketLoginOutLoginSuccess` wire-format bug** (commit `3fd1af4`, on both branches since
+  `production` moved to 26.3):
   the packet wrote an extra, unused internal `sessionId` UUID (16 bytes) onto the wire after the
   properties-count field - not part of the real `login_finished` packet format at all. Velocity's
   decoder rejected it outright as a corrupted frame. `sessionId` had no other consumer anywhere in
