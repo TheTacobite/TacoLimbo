@@ -70,8 +70,9 @@ network's Paper servers move to that version.
    fails at login with "Failed to parse value", so a successful join plus moving around is the
    real check.
 5. **Release** - fast-forward `production`, tag `v<pom version>-<mc version>`, attach the jar,
-   copy it into `NetCoreLimbo/libs/` (updating that pom's Limbo version), and deploy with
-   NetCoreVelocity's `62-fetch-shared-plugins.sh limbo` then `31-update-plugins.sh all limbo`.
+   copy it into `NetCoreLimbo/libs/` (updating that pom's Limbo version), pin the new tag as
+   `TACOLIMBO` in [NetCoreDeploy](https://github.com/TheTacobite/NetCoreDeploy)'s `versions.env`,
+   push, and run `sudo netcore update` on Box 2.
 
 ## Building
 
